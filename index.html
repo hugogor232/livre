@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini KDP Creator ✨</title>
+    <!-- Police Goolge Fonts moderne -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #8b5cf6;
+            --primary-light: #a78bfa;
+            --primary-dark: #7c3aed;
+            --bg-color: #0f172a;
+            --surface: rgba(30, 41, 59, 0.7);
+            --surface-hover: rgba(51, 65, 85, 0.8);
+            --border: rgba(255, 255, 255, 0.1);
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+            --danger: #ef4444;
+            --success: #10b981;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-attachment: fixed;
+        }
+
+        /* ----- NAVIGATION ----- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 3rem;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 800;
+            background: linear-gradient(to right, #a78bfa, #f472b6);
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links button {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            font-weight: 500;
+            cursor: pointer;
+            margin-left: 2rem;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+
+        .nav-links button:hover,
+        .nav-links button.active {
+            color: var(--text);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+
+        /* ----- STRUCTURE PRINCIPALE ----- */
+        .container {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Animations de changement de vue */
+        .section {
+            display: none;
+            animation: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Composant "Glass" */
+        .glass-panel {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        h2 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 2rem;
+        }
+
+        /* ----- FORMULAIRES ----- */
+        .form-row {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            flex: 1;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.6rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            border-radius: 12px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--border);
+            color: white;
+            font-family: inherit;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        input:focus {
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.05rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: inherit;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(139, 92, 246, 0.5);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn.danger {
+            background: linear-gradient(135deg, var(--danger), #b91c1c);
+        }
+
+        .btn.danger:hover {
+            box-shadow: 0 10px 25px -5px rgba(239, 68, 68, 0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        /* ----- TERMINAL DE PROGRESSION ----- */
+        .terminal-container {
+            margin-top: 2.5rem;
+            display: none;
+        }
+
+        .terminal {
+            background: #000;
+            padding: 1.5rem;
+            border-radius: 12px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            color: #4ade80;
+            height: 350px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            border: 1px solid #334155;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 1);
+        }
+
+        /* ----- GRILLE BIBLIOTHÈQUE ----- */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 2rem;
+        }
+
+        .book-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+        }
+
+        .book-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: var(--primary-light);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.6);
+        }
+
+        .book-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-bottom: 1px solid #334;
+        }
+
+        .placeholder {
+            width: 100%;
+            height: 250px;
+            background: #1e293b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #475569;
+        }
+
+        .book-info {
+            padding: 1.5rem;
+        }
+
+        .book-title {
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        .book-meta {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* ----- VUE DETAILS DU LIVRE ----- */
+        .header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        /* Conteneurs d'images avec bouton Régénérer */
+        .page-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .page-container img {
+            width: 100%;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            cursor: zoom-in;
+            transition: transform 0.2s;
+        }
+
+        .page-container img:hover {
+            transform: scale(1.02);
+        }
+
+        .regen-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid var(--primary);
+            color: white;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            backdrop-filter: blur(4px);
+            transition: all 0.2s;
+            opacity: 0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .page-container:hover .regen-btn {
+            opacity: 1;
+        }
+
+        .regen-btn:hover {
+            background: var(--primary);
+            transform: scale(1.05);
+        }
+
+        .regen-btn.loading {
+            background: var(--primary-dark);
+            cursor: not-allowed;
+            opacity: 1 !important;
+        }
+
+        .book-layout {
+            width: 100%;
+            aspect-ratio: 3/4;
+            object-fit: contain;
+            background: white;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .book-card .placeholder {
+            width: 100%;
+            aspect-ratio: 3/4;
+            background: rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 3rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .book-info {
+            padding: 1.2rem;
+        }
+
+        .book-title {
+            font-weight: 600;
+            font-size: 1.15rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 0.3rem;
+        }
+
+        .book-meta {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* ----- DÉTAIL D'UN LIVRE ----- */
+        .book-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2.5rem;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .book-title-large {
+            font-size: 2.5rem;
+            font-weight: 800;
+        }
+
+        .tools {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .book-content {
+            display: flex;
+            gap: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .cover-preview {
+            flex: 0 0 320px;
+        }
+
+        .book-cover-large {
+            width: 100%;
+            border-radius: 16px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: white;
+        }
+
+        .pages-preview {
+            flex: 1;
+        }
+
+        .book-images-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 1rem;
+        }
+
+        .book-images-grid img {
+            width: 100%;
+            border-radius: 10px;
+            background: white;
+            border: 2px solid transparent;
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+
+        .book-images-grid img:hover {
+            transform: scale(1.08);
+            border-color: var(--primary);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            z-index: 10;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+
+            .book-content {
+                flex-direction: column;
+            }
+
+            .cover-preview {
+                flex: 1;
+                width: 100%;
+                max-width: 400px;
+                margin: 0 auto;
+            }
+
+            nav {
+                padding: 1rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+        }
+
+        .page-container.missing {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px dashed var(--border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 200px;
+        }
+
+        .missing-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <div class="logo">✨ Gemini KDP</div>
+        <div class="nav-links">
+            <button id="nav-create" class="active" onclick="showSection('create')">🚀 Générer</button>
+            <button id="nav-library" onclick="showSection('library')">📚 Bibliothèque</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- ============== VUE : CRÉER UN LIVRE ============== -->
+        <div id="sec-create" class="section active glass-panel">
+            <h2>Nouveau Livre de Coloriage</h2>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Thème principal (ex: Dragons très mignons)</label>
+                    <input type="text" id="inp-theme" placeholder="Qu'allons-nous dessiner ?">
+                </div>
+                <div class="form-group">
+                    <label>Titre affiché sur la couverture (Optionnel)</label>
+                    <input type="text" id="inp-title" placeholder="Mon Titre Formidable">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Nombre de dessins</label>
+                    <input type="number" id="inp-pages" value="20" min="2" max="100">
+                </div>
+            </div>
+
+            <button id="btn-generate" class="btn"
+                style="width: 100%; font-size: 1.2rem; padding: 1.2rem; margin-top: 1rem;" onclick="startGeneration()">
+                🪄 Lancer la Génération Magique
+            </button>
+
+            <div id="terminal-container" class="terminal-container">
+                <h3 style="margin-bottom: 1rem; color: var(--text-muted); font-size: 1rem; text-transform: uppercase;">
+                    Activité de l'IA</h3>
+                <div id="terminal" class="terminal">En attente de démarrage...</div>
+            </div>
+        </div>
+
+        <!-- ============== VUE : BIBLIOTHÈQUE ============== -->
+        <div id="sec-library" class="section">
+            <h2>Ma Bibliothèque Amazon KDP</h2>
+            <div id="books-grid" class="grid"></div>
+        </div>
+
+        <!-- ============== VUE : DÉTAIL D'UN LIVRE ============== -->
+        <div id="sec-book" class="section glass-panel">
+            <button class="btn" onclick="showSection('library')" style="margin-bottom: 2rem; padding: 0.6rem 1.2rem;">←
+                Retour à la liste</button>
+
+            <div class="book-header">
+                <h1 id="detail-title" class="book-title-large">Titre du livre</h1>
+                <div class="tools">
+                    <a id="btn-dl-interior" class="btn" href="#" target="_blank">📄 PDF Intérieur</a>
+                    <a id="btn-dl-cover" class="btn" style="background: linear-gradient(135deg, #10b981, #059669);"
+                        href="#" target="_blank">🖼️ PDF Couverture</a>
+                    <a id="btn-dl-preview" class="btn" style="background: linear-gradient(135deg, #f59e0b, #d97706);"
+                        href="#" target="_blank">👀 Aperçu Complet</a>
+                    <button id="btn-recompile" class="btn"
+                        style="background: linear-gradient(135deg, #6366f1, #4f46e5);" onclick="recompileBook()">🔄
+                        Recompiler les PDFs</button>
+                    <button class="btn danger" onclick="deleteCurrentBook()">🗑️ Supprimer</button>
+                </div>
+            </div>
+
+            <div class="book-content">
+                <div class="cover-preview">
+                    <img id="detail-cover" class="book-cover-large" src="" alt="Couverture">
+                    <p class="metadata" style="text-align: center; margin-top: 0.5rem; font-size: 0.8rem;">Couverture
+                        finale pour KDP</p>
+                    <button id="btn-regen-cover" class="btn"
+                        style="margin: 0.5rem auto; display: block; background: linear-gradient(135deg, #ec4899, #db2777); font-size: 0.8rem;"
+                        onclick="regenerateCover()">🔄 Refaire Couverture (2K)</button>
+                </div>
+                <div class="pages-preview">
+                    <h3 style="margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem;">
+                        Pages de coloriage brutes</h3>
+                    <div class="book-images-grid" id="detail-pages"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* ----- LOGIQUE JAVASCRIPT VANILLA ----- */
+        let currentBookId = null;
+        let statusInterval = null;
+
+        // Gestion de la navigation entre les vues
+        function showSection(name) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-links button').forEach(b => b.classList.remove('active'));
+
+            if (name === 'create') {
+                document.getElementById('sec-create').classList.add('active');
+                document.getElementById('nav-create').classList.add('active');
+            } else if (name === 'library') {
+                document.getElementById('sec-library').classList.add('active');
+                document.getElementById('nav-library').classList.add('active');
+                loadBooks();
+            } else if (name === 'book') {
+                document.getElementById('sec-book').classList.add('active');
+            }
+        }
+
+        // Lancer la géneration asynchrone
+        async function startGeneration() {
+            const theme = document.getElementById('inp-theme').value;
+            const title = document.getElementById('inp-title').value;
+            const pages = document.getElementById('inp-pages').value;
+
+            if (!theme) {
+                alert("Veuillez fournir un theme.");
+                return;
+            }
+
+            document.getElementById('btn-generate').disabled = true;
+            document.getElementById('btn-generate').innerText = "⏳ Création en cours...";
+            document.getElementById('terminal-container').style.display = 'block';
+            document.getElementById('terminal').innerHTML = 'Vérification...';
+
+            try {
+                const res = await fetch('/api/generate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ theme, title, pages: parseInt(pages) })
+                });
+                const data = await res.json();
+
+                if (!res.ok) {
+                    alert(data.error);
+                    resetButton();
+                    return;
+                }
+
+                // Poll le serveur chaque seconde pour avoir le terminal
+                if (statusInterval) clearInterval(statusInterval);
+                statusInterval = setInterval(pollStatus, 1000);
+
+            } catch (e) {
+                alert("Erreur réseau : " + e);
+                resetButton();
+            }
+        }
+
+        function resetButton() {
+            document.getElementById('btn-generate').disabled = false;
+            document.getElementById('btn-generate').innerText = "🪄 Lancer la Génération Magique";
+        }
+
+        // Lire l'état du backend
+        async function pollStatus() {
+            try {
+                const res = await fetch('/api/status');
+                const status = await res.json();
+
+                const term = document.getElementById('terminal');
+                term.innerHTML = status.log.join('<br>') + '<br><br><b>> ' + status.progress + '</b>';
+                term.scrollTop = term.scrollHeight;
+
+                if (!status.running && status.theme) {
+                    clearInterval(statusInterval);
+                    resetButton();
+                    if (status.progress.includes("succes") || status.progress.includes("✓")) {
+                        setTimeout(() => showSection('library'), 1500); // Redirige vers la bibli
+                    }
+                }
+            } catch (e) { }
+        }
+
+        // Charger la liste des livres
+        async function loadBooks() {
+            const grid = document.getElementById('books-grid');
+            grid.innerHTML = '<p>Chargement de la bibliothèque...</p>';
+            try {
+                const res = await fetch('/api/books');
+                const books = await res.json();
+
+                if (books.length === 0) {
+                    grid.innerHTML = '<p style="color:var(--text-muted); font-size: 1.1rem; grid-column: 1/-1;">Aucun livre généré pour le moment. Allez créer votre premier livre ! 🎨</p>';
+                    return;
+                }
+
+                grid.innerHTML = '';
+                books.forEach(b => {
+                    const card = document.createElement('div');
+                    card.className = 'book-card';
+                    card.onclick = () => showBookDetail(b);
+
+                    let imgHtml = b.has_cover
+                        ? `<img src="/output/${b.id}/cover_image.png" loading="lazy" alt="Cover">`
+                        : `<div class="placeholder">📄</div>`;
+
+                    const readyPages = b.pages.filter(p => p.exists).length;
+                    const totalPages = b.pages.length;
+
+                    card.innerHTML = `
+                    ${imgHtml}
+                    <div class="book-info">
+                        <div class="book-title">${b.title}</div>
+                        <div class="book-meta">${readyPages} / ${totalPages} pages prêtes</div>
+                    </div>
+                `;
+                    grid.appendChild(card);
+                });
+            } catch (e) {
+                grid.innerHTML = `<p style="color:var(--danger)">Erreur de connexion au serveur local.</p>`;
+            }
+        }
+
+        // Ouvrir un livre spécifique
+        function showBookDetail(book) {
+            currentBookId = book.id;
+            document.getElementById('detail-title').innerText = book.title;
+
+            const coverEl = document.getElementById('detail-cover');
+            coverEl.src = book.has_cover ? `/output/${book.id}/cover_image.png` : '';
+            coverEl.style.display = book.has_cover ? 'block' : 'none';
+
+            const btnInt = document.getElementById('btn-dl-interior');
+            const btnCov = document.getElementById('btn-dl-cover');
+            const btnPrev = document.getElementById('btn-dl-preview');
+
+            if (book.pdf_interior) {
+                btnInt.href = `/output/${book.id}/${book.pdf_interior}`;
+                btnInt.style.display = 'inline-block';
+            } else {
+                btnInt.style.display = 'none';
+            }
+
+            if (book.pdf_preview) {
+                btnPrev.href = `/output/${book.id}/${book.pdf_preview}`;
+                btnPrev.style.display = 'inline-block';
+            } else {
+                btnPrev.style.display = 'none';
+            }
+
+            if (book.pdf_cover) {
+                btnCov.href = `/output/${book.id}/${book.pdf_cover}`;
+                btnCov.style.display = 'inline-block';
+            } else {
+                btnCov.style.display = 'none';
+            }
+
+            const pagesContainer = document.getElementById('detail-pages');
+            pagesContainer.innerHTML = '';
+            book.pages.forEach(p => {
+                const container = document.createElement('div');
+                container.className = 'page-container';
+                if (!p.exists) container.classList.add('missing');
+
+                const img = document.createElement('img');
+                if (p.exists) {
+                    // Ajout d'un timestamp eventuel si l'image vient d'etre regeneree (evite le cache)
+                    img.src = `/output/${book.id}/pages/${p.name}?t=${new Date().getTime()}`;
+                    img.loading = "lazy";
+                    img.className = 'book-page-img';
+                    img.onclick = () => window.open(img.src.split('?')[0], '_blank'); // zoom dans un nouvel onglet
+                    container.appendChild(img);
+                } else {
+                    const label = document.createElement('div');
+                    label.className = 'missing-label';
+                    label.innerText = `Page ${p.name.replace('page_', '').replace('.png', '')} absente`;
+                    container.appendChild(label);
+                }
+
+                const regenBtn = document.createElement('button');
+                regenBtn.className = 'regen-btn';
+                regenBtn.style.display = 'block'; // Toujours afficher pour permettre regen
+                regenBtn.innerHTML = p.exists ? '🔄 Refaire' : '✨ Générer';
+                regenBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    regeneratePage(book.id, p.name, container, img, regenBtn);
+                };
+
+                container.appendChild(regenBtn);
+                pagesContainer.appendChild(container);
+            });
+
+            showSection('book');
+        }
+
+        // Fonction pour envoyer la requete de regeneration specifique a une image
+        async function regeneratePage(bookId, pageName, container, imgEl, btnEl) {
+            if (!confirm(`Tenter de régénérer ${pageName} avec le même prompt ? Le PDF sera mis à jour. (Rapide : ~15s)`)) return;
+
+            // État de chargement
+            const originalText = btnEl.innerHTML;
+            btnEl.innerHTML = '⏳ Création...';
+            btnEl.classList.add('loading');
+            btnEl.disabled = true;
+            imgEl.style.opacity = '0.5';
+
+            try {
+                const res = await fetch('/api/regenerate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ book_id: bookId, page_name: pageName })
+                });
+
+                const data = await res.json();
+                if (res.ok) {
+                    btnEl.innerHTML = '✅ Lancé !';
+                    // On poll le rechargement de l'image apres un delay fixe arbitraire
+                    // car la requete api HTTP rend la main avant la fin du compile PDF
+                    setTimeout(() => {
+                        imgEl.src = `/output/${bookId}/pages/${pageName}?t=${new Date().getTime()}`;
+                        imgEl.style.opacity = '1';
+                        btnEl.innerHTML = '🔄 Refaire';
+                        btnEl.classList.remove('loading');
+                        btnEl.disabled = false;
+                        alert('✨ Page régénérée et PDF mis à jour !');
+                    }, 25000); // Wait roughly the time generation takes
+                } else {
+                    alert('Erreur API: ' + (data.error || 'Erreur inconnue'));
+                    resetBtn();
+                }
+            } catch (error) {
+                alert('Erreur réseau.');
+                resetBtn();
+            }
+
+            function resetBtn() {
+                btnEl.innerHTML = originalText;
+                btnEl.classList.remove('loading');
+                btnEl.disabled = false;
+                imgEl.style.opacity = '1';
+            }
+        }
+
+        // Regenere la couverture (avant + arriere)
+        async function regenerateCover() {
+            if (!currentBookId) return;
+
+            const btn = document.getElementById('btn-regen-cover');
+            const originalText = btn.innerHTML;
+
+            if (!confirm("Voulez-vous régénérer la couverture avant et arrière en haute résolution (2K) ?\nCela prendra environ 30-45 secondes.")) return;
+
+            btn.disabled = true;
+            btn.innerHTML = "⏳ Génération 2K...";
+
+            try {
+                const res = await fetch('/api/regenerate_cover', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ book_id: currentBookId })
+                });
+
+                const data = await res.json();
+                alert(data.message || data.error);
+
+                if (res.ok) {
+                    // Cache busting pour la couverture
+                    setTimeout(() => {
+                        const coverImg = document.getElementById('detail-cover');
+                        coverImg.src = `/output/${currentBookId}/cover_image.png?t=${new Date().getTime()}`;
+                    }, 30000); // Attendre la fin probable de la generation
+                }
+            } catch (e) {
+                alert("❌ Erreur : " + e);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+            }
+        }
+
+        // Recompiler tous les PDF d'un livre (utile si images ajoutees/modifiees manuellement)
+        async function recompileBook() {
+            if (!currentBookId) return;
+
+            const btn = document.getElementById('btn-recompile');
+            const originalText = btn.innerHTML;
+
+            if (!confirm("Voulez-vous recompiler tous les PDFs de ce livre ? Cela prendra environ 10-15 secondes.")) return;
+
+            btn.disabled = true;
+            btn.innerHTML = "⏳ Compilation...";
+
+            try {
+                const res = await fetch('/api/recompile', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ book_id: currentBookId })
+                });
+
+                const data = await res.json();
+                if (res.ok) {
+                    alert("✅ PDFs mis à jour avec succès !");
+                    // Rafraîchir les liens
+                    const bookRes = await fetch('/api/books');
+                    const books = await bookRes.json();
+                    const currentBook = books.find(b => b.id === currentBookId);
+                    if (currentBook) showBookDetail(currentBook);
+                } else {
+                    alert("❌ Erreur : " + data.error);
+                }
+            } catch (e) {
+                alert("❌ Erreur de connexion : " + e);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+            }
+        }
+
+        // Supprimer un livre
+        async function deleteCurrentBook() {
+            if (!confirm("⚠️ Êtes-vous sûr de vouloir supprimer définitivement les PDFs et images de ce livre ?")) return;
+            try {
+                await fetch(`/api/books/${currentBookId}`, { method: 'DELETE' });
+                showSection('library');
+            } catch (e) {
+                alert('Erreur lors de la suppression.');
+            }
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.env
+.venv
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.cache
+nosetests.xml
+coverage.xml
+*,cover
+.hypothesis/
+
+# KDP Project Specific
+output/
+reference.png
+artifacts/
+
+# System / IDE
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
